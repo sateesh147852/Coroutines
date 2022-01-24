@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Main thread will be blocked for 5 seconds
-        runBlocking {
+        /*runBlocking {
             Log.i(TAG, Thread.currentThread().name)
             doNetworkCall()
-        }
+        }*/
 
         //Main thread will not be blocked for 5 seconds
         /*GlobalScope.launch(Dispatchers.Main){
@@ -34,9 +34,32 @@ class MainActivity : AppCompatActivity() {
             doNetworkCall()
             Log.i(TAG, "got response from api")
         }*/
+
+        ///////////////////////////////////////////////////////////////
+
+        runBlocking {
+            /*
+            This will take 10 seconds
+            doNetworkCall()
+            doNetworkCall()
+            Log.i(TAG, "Network call finished")*/
+
+            //both will take only five seconds
+            launch {
+                doNetworkCall()
+                Log.i(TAG, "Network call done 1 "+Thread.currentThread().name)
+            }
+            launch {
+                doNetworkCall()
+                Log.i(TAG, "Network call done 2 "+Thread.currentThread().name)
+            }
+            delay(7000)
+            Log.i(TAG, "run blocking done "+Thread.currentThread().name)
+        }
     }
 
     private suspend fun doNetworkCall() {
-        delay(5000)
+        delay(8000)
     }
+
 }
