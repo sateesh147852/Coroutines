@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.coroutines.databinding.ActivityMainBinding
 import com.coroutines.viewmodel.MainViewModel
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -29,14 +30,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch {
-            while (true) {
+            /*while (true) {
                 Log.i(TAG, "Running")
-            }
+            }*/
+            val answer1 = doNetworkCall1()
+            val answer2 = doNetworkCall2()
+            Log.i(TAG, answer1 + answer2)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i("onDestroy", "onDestroy: ")
+    }
+
+    private suspend fun doNetworkCall1() : String  {
+        delay(4000)
+        return "Answer received from one"
+    }
+
+    private suspend fun doNetworkCall2() : String {
+        delay(4000)
+        return "Answer received from two"
     }
 }
