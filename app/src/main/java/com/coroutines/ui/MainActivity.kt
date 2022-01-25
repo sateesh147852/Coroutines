@@ -1,14 +1,13 @@
 package com.coroutines.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.coroutines.databinding.ActivityMainBinding
 import com.coroutines.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,5 +20,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        lifecycleScope.launch {
+            while (true){
+                Log.i(TAG, "coroutines is still running.....")
+                delay(1000)
+            }
+        }
+
+        lifecycleScope.launch {
+            delay(5000)
+            Intent(this@MainActivity, SecondActivity::class.java).also {
+                startActivity(it)
+                finish()
+            }
+        }
     }
+
+
 }
