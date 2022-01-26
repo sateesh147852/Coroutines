@@ -27,7 +27,7 @@ class MainViewModel : ViewModel() {
 
     private suspend fun getAllPhotos() {
 
-        val response = RetrofitHelper.getApiService().getAllPhotos()
+        val response = RetrofitHelper.getApiService().getAllPhotos().await()
 
         withContext(Dispatchers.Main){
             if (response.isSuccessful) {

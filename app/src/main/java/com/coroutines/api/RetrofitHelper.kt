@@ -13,7 +13,7 @@ object RetrofitHelper {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            //.addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
             .create(ApiService::class.java)
     }
