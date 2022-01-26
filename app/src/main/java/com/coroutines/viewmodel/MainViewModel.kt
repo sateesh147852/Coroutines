@@ -29,13 +29,9 @@ class MainViewModel : ViewModel() {
 
         val response = RetrofitHelper.getApiService().getAllPhotos().await()
 
+        //Error cant be handled
         withContext(Dispatchers.Main){
-            if (response.isSuccessful) {
-                Log.i(TAG, "getAllPhotos: ${response.body()?.size}")
-                photos.value = response.body()
-            } else {
-                error.value = response.errorBody().toString()
-            }
+            photos.value = response
         }
 
     }

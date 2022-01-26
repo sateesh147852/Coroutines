@@ -8,6 +8,6 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("/photos")
-    fun getAllPhotos(): Deferred<Response<List<RetroPhoto>>>
+    fun getAllPhotos(): Deferred<List<RetroPhoto>>
 
 }
