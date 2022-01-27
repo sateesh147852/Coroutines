@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coroutines.api.RetrofitHelper
 import com.coroutines.model.RetroPhoto
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import retrofit2.Response
 
 class MainViewModel : ViewModel() {
 
@@ -27,14 +25,24 @@ class MainViewModel : ViewModel() {
 
     private suspend fun getAllPhotos() {
 
-        val response = RetrofitHelper.getApiService().getAllPhotos().await()
+        val response: Result<Deferred<Response<List<RetroPhoto>>>> = kotlin.runCatching {
+            RetrofitHelper.getApiService().getAllPhotos()
+        }
 
-        withContext(Dispatchers.Main){
-            if (response.isSuccessful) {
-                Log.i(TAG, "getAllPhotos: ${response.body()?.size}")
-                photos.value = response.body()
-            } else {
-                error.value = response.errorBody().toString()
+        if(response.isSuccess){
+
+            response.map {
+                withContext(Dispatchers.Main){
+                    photos.value = it.await().body()
+                }
+            }
+
+        }
+        else{
+            response.onFailure {
+                withContext(Dispatchers.Main){
+                    error.value = it.message
+                }
             }
         }
 
