@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
             RetrofitHelper.getApiService().getAllPhotos()
         }
 
-        if(response.isSuccess){
+        /*if(response.isSuccess){
 
             response.map {
                 withContext(Dispatchers.Main){
@@ -37,6 +37,13 @@ class MainViewModel : ViewModel() {
                 }
             }
 
+        }*/
+        if (response.isSuccess){
+            response.onSuccess {
+                withContext(Dispatchers.Main){
+                    photos.value = it.await().body()
+                }
+            }
         }
         else{
             response.onFailure {
